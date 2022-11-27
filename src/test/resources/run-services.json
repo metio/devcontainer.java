@@ -1,0 +1,3 @@
+{
+  "runServices": ["database", "proxy"]
+}

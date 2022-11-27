@@ -1,0 +1,9 @@
+{
+  "otherPortsAttributes": {
+    "label": "Application Port",
+    "protocol": "http",
+    "onAutoForward": "openBrowser",
+    "requireLocalPort": true,
+    "elevateIfNeeded": true
+  }
+}

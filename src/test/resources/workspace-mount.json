@@ -1,0 +1,3 @@
+{
+  "workspaceMount": "source=${localWorkspaceFolder}/sub-folder,target=/workspace,type=bind,consistency=cached"
+}

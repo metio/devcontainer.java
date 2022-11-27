@@ -1,0 +1,6 @@
+{
+  "updateContentCommand": {
+    "server": "npm start",
+    "db": ["mysql", "-u", "root", "-p", "my database"]
+  }
+}

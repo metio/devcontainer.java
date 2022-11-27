@@ -1,0 +1,3 @@
+{
+  "forwardPorts": ["db:5432"]
+}

@@ -1,0 +1,11 @@
+{
+  "build": {
+    "dockerfile": "Containerfile",
+    "context": ".",
+    "target": "dev",
+    "args": {
+      "some": "value"
+    },
+    "cacheFrom": ["some-cache:latest"]
+  }
+}
