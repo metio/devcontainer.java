@@ -6,3 +6,12 @@ SPDX-License-Identifier: 0BSD
 # devcontainer.java
 
 Java implementation for the [devcontainer](https://containers.dev/implementors/json_reference/) file specification.
+
+## Usage
+
+```java
+import wtf.metio.devcontainer.DevcontainerParser;
+import java.nio.file.Paths;
+
+Devcontainer devcontainer = DevcontainerParser.parseDevcontainer(Paths.get("path/to/devcontainer.json"));
+```
