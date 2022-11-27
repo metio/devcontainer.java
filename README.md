@@ -13,5 +13,9 @@ Java implementation for the [devcontainer](https://containers.dev/implementors/j
 import wtf.metio.devcontainer.DevcontainerParser;
 import java.nio.file.Paths;
 
-Devcontainer devcontainer = DevcontainerParser.parseDevcontainer(Paths.get("path/to/devcontainer.json"));
+// parse JSON file
+Devcontainer devcontainer = DevcontainerParser.parseDevcontainer(
+    Paths.get("path/to/devcontainer.json"));
+
+devcontainer.image(); // access properties
 ```
