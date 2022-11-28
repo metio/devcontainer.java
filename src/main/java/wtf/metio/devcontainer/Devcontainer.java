@@ -4,6 +4,11 @@
  */
 package wtf.metio.devcontainer;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -213,5 +218,36 @@ public record Devcontainer(
     Command postAttachCommand,
     WaitFor waitFor,
     HostRequirements hostRequirements) {
+
+  public static Devcontainer parse(final Path devcontainer) throws IOException {
+    return parse(devcontainer, defaultObjectMapper());
+  }
+
+  public static Devcontainer parse(final Path devcontainer, final ObjectMapper objectMapper) throws IOException {
+    return objectMapper.readValue(devcontainer.toFile(), Devcontainer.class);
+  }
+
+  public static Devcontainer parse(final File devcontainer) throws IOException {
+    return parse(devcontainer, defaultObjectMapper());
+  }
+
+  public static Devcontainer parse(final File devcontainer, final ObjectMapper objectMapper) throws IOException {
+    return objectMapper.readValue(devcontainer, Devcontainer.class);
+  }
+
+  public static Devcontainer parse(final String devcontainer) throws IOException {
+    return parse(devcontainer, defaultObjectMapper());
+  }
+
+  public static Devcontainer parse(final String devcontainer, final ObjectMapper objectMapper) throws IOException {
+    return objectMapper.readValue(devcontainer, Devcontainer.class);
+  }
+
+  public static ObjectMapper defaultObjectMapper() {
+    final var mapper = new ObjectMapper();
+    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+    return mapper;
+  }
 
 }
