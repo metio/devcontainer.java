@@ -8,4 +8,6 @@ module wtf.metio.devcontainer {
 
   opens wtf.metio.devcontainer to com.fasterxml.jackson.databind;
 
+  exports wtf.metio.devcontainer;
+
 }
