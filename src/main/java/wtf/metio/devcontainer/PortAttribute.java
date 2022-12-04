@@ -4,6 +4,8 @@
  */
 package wtf.metio.devcontainer;
 
+import io.soabase.recordbuilder.core.RecordBuilder;
+
 /**
  * @param label            Display name for the port in the ports view. Defaults to not set.
  * @param protocol         Controls protocol handling for forwarded ports. When not set, the port is assumed to be a raw
@@ -30,6 +32,8 @@ package wtf.metio.devcontainer;
  *                         supporting tool’s permissions in this situation. Defaults to false.
  * @see <a href="https://containers.dev/implementors/json_reference/#port-attributes">schema reference</a>
  */
+@RecordBuilder
+@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
 public record PortAttribute(
     String label,
     Protocol protocol,

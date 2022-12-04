@@ -5,6 +5,7 @@
 package wtf.metio.devcontainer;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import java.util.Map;
  * @see <a href="https://containers.dev/implementors/json_reference/#formatting-string-vs-array-properties">schema
  * reference</a>
  */
+@RecordBuilder
+@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
 @JsonDeserialize(using = CommandDeserializer.class)
 public record Command(
     String string,
