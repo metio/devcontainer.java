@@ -64,8 +64,6 @@
   <!-- https://maven.apache.org/pom.html#Properties -->
   <properties>
     <version.jdk>17</version.jdk>
-
-    <pit.mutationCoverage>65</pit.mutationCoverage>
   </properties>
 
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
