@@ -4,6 +4,7 @@
  */
 package wtf.metio.devcontainer;
 
+import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ import java.util.Map;
  *                   the array syntax will execute the command without a shell. You can learn more about formatting
  *                   string vs array properties.
  */
+@RecordBuilder
+@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
 public record Build(
     String dockerfile,
     String context,

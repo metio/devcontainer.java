@@ -6,6 +6,7 @@ package wtf.metio.devcontainer;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.soabase.recordbuilder.core.RecordBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -180,6 +181,8 @@ import java.util.Map;
  *                                    happen behind the scenes afterwards.
  * @see <a href="https://code.visualstudio.com/docs/remote/devcontainerjson-reference">devcontainer reference</a>
  */
+@RecordBuilder
+@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
 public record Devcontainer(
     String name,
     List<String> forwardPorts,
