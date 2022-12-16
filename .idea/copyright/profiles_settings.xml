@@ -1,0 +1,10 @@
+<component name="CopyrightManager">
+  <settings default="devcontainer.java">
+    <module2copyright>
+      <element module="Project Files" copyright="devcontainer.java" />
+    </module2copyright>
+    <LanguageOptions name="JAVA">
+      <option name="addBlankBefore" value="true" />
+    </LanguageOptions>
+  </settings>
+</component>

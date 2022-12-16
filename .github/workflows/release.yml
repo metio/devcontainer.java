@@ -4,7 +4,7 @@
 name: Automated Release
 on:
   schedule:
-    - cron: 45 3 * * WED
+    - cron: 35 5 * * FRI
   workflow_dispatch:
 jobs:
   publish:
@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
       - id: commits
         name: Count Commits
-        run: echo "count=$(git rev-list --count HEAD --since='last Wednesday')" >> $GITHUB_OUTPUT
+        run: echo "count=$(git rev-list --count HEAD --since='1 week ago')" >> $GITHUB_OUTPUT
       - id: release
         name: Create Release Version
         if: steps.commits.outputs.count > 0
@@ -31,17 +31,8 @@ jobs:
         if: steps.commits.outputs.count > 0
         run: echo "iso8601=$(date --utc --iso-8601=seconds)" >> $GITHUB_OUTPUT
       - id: setup-java
-        name: Set up Java
+        uses: ./.github/actions/managed-maven
         if: steps.commits.outputs.count > 0
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          java-package: jdk
-          architecture: x64
-          distribution: temurin
-          server-id: ossrh
-          server-username: MAVEN_CENTRAL_USERNAME
-          server-password: MAVEN_CENTRAL_TOKEN
       - id: cache
         name: Cache Dependencies
         if: steps.commits.outputs.count > 0
@@ -57,7 +48,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: signing.key.asc
-          fileDir: ${{ github.workspace}}
+          fileDir: ${{ github.workspace }}
           encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
       - id: pom-version
         name: Set Release Version
@@ -71,7 +62,7 @@ jobs:
             --batch-mode \
             --activate-profiles release \
             --define scmTag=${{ steps.sha.outputs.sha }} \
-            --define pgp.secretkey=keyfile:signing.key.asc \
+            --define pgp.secretkey=keyfile:${{ steps.gpg.outputs.filePath }} \
             --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }} \
             --define project.build.outputTimestamp=${{ steps.timestamp.outputs.iso8601 }} \
             deploy
@@ -101,7 +92,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: ${{ github.event.repository.name }} version ${{ steps.release.outputs.version }} published
           body: See ${{ steps.create_release.outputs.url }} for details.
-          to: announcements@metio.groups.io
+          to: ${{ secrets.MAIL_RECIPIENT }}
           from: ${{ secrets.MAIL_SENDER }}
       - id: matrix
         name: Send Matrix Message
@@ -111,4 +102,4 @@ jobs:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
           message: ${{ github.event.repository.name }} version [${{ steps.release.outputs.version }}](${{ steps.create_release.outputs.url }}) published
-          server: matrix.org
+          server: ${{ secrets.MATRIX_SERVER }}
