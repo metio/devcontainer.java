@@ -33,12 +33,16 @@ import io.soabase.recordbuilder.core.RecordBuilder;
  * @see <a href="https://containers.dev/implementors/json_reference/#port-attributes">schema reference</a>
  */
 @RecordBuilder
-@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
+@RecordBuilder.Options(buildMethodName = "create")
 public record PortAttribute(
     String label,
     Protocol protocol,
     OnAutoForward onAutoForward,
     Boolean requireLocalPort,
-    Boolean elevateIfNeeded) {
+    Boolean elevateIfNeeded) implements PortAttributeBuilder.With {
+
+    public static PortAttributeBuilder builder() {
+        return PortAttributeBuilder.builder();
+    }
 
 }

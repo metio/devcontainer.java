@@ -20,11 +20,15 @@ import java.util.Map;
  * reference</a>
  */
 @RecordBuilder
-@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
+@RecordBuilder.Options(buildMethodName = "create")
 @JsonDeserialize(using = CommandDeserializer.class)
 public record Command(
     String string,
     List<String> array,
-    Map<String, Command> object) {
+    Map<String, Command> object) implements CommandBuilder.With {
+
+    public static CommandBuilder builder() {
+        return CommandBuilder.builder();
+    }
 
 }

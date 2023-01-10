@@ -15,10 +15,14 @@ import io.soabase.recordbuilder.core.RecordBuilder;
  *                "hostRequirements": {"storage": "32gb"}
  */
 @RecordBuilder
-@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
+@RecordBuilder.Options(buildMethodName = "create")
 public record HostRequirements(
     Integer cpus,
     String memory,
-    String storage) {
+    String storage) implements HostRequirementsBuilder.With {
+
+    public static HostRequirementsBuilder builder() {
+        return HostRequirementsBuilder.builder();
+    }
 
 }

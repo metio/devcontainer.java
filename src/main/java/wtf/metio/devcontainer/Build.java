@@ -25,12 +25,16 @@ import java.util.Map;
  *                   string vs array properties.
  */
 @RecordBuilder
-@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
+@RecordBuilder.Options(buildMethodName = "create")
 public record Build(
     String dockerfile,
     String context,
     Map<String, String> args,
     String target,
-    List<String> cacheFrom) {
+    List<String> cacheFrom) implements BuildBuilder.With {
+
+    public static BuildBuilder builder() {
+        return BuildBuilder.builder();
+    }
 
 }

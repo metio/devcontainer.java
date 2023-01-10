@@ -182,7 +182,7 @@ import java.util.Map;
  * @see <a href="https://code.visualstudio.com/docs/remote/devcontainerjson-reference">devcontainer reference</a>
  */
 @RecordBuilder
-@RecordBuilder.Options(buildMethodName = "create", enableWither = false)
+@RecordBuilder.Options(buildMethodName = "create")
 public record Devcontainer(
     String name,
     List<String> forwardPorts,
@@ -220,7 +220,7 @@ public record Devcontainer(
     Command postStartCommand,
     Command postAttachCommand,
     WaitFor waitFor,
-    HostRequirements hostRequirements) {
+    HostRequirements hostRequirements) implements DevcontainerBuilder.With {
 
   public static Devcontainer parse(final Path devcontainer) throws IOException {
     return parse(devcontainer, defaultObjectMapper());
@@ -251,6 +251,10 @@ public record Devcontainer(
     mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
     return mapper;
+  }
+
+  public static DevcontainerBuilder builder() {
+    return DevcontainerBuilder.builder();
   }
 
 }
