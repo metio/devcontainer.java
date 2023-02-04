@@ -7,6 +7,10 @@ Files: .idea/*
 Copyright: The devcontainer.java Authors
 License: 0BSD
 
+Files: src/main/resources/META-INF/*
+Copyright: The devcontainer.java Authors
+License: 0BSD
+
 Files: src/test/resources/*.json
 Copyright: The devcontainer.java Authors
 License: 0BSD
