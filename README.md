@@ -37,9 +37,16 @@ String image = devcontainer.image();
 The `Devcontainer` class is annotated with [record-builder](https://github.com/Randgalt/record-builder) annotations which allow you to create new `Devcontainer` instances like this:
 
 ```java
-Devcontainer devcontainer = DevcontainerBuilder.builder()
+Devcontainer devcontainer = Devcontainer.builder()
         .image("docker.io/someuser/someimage:someversion")
         .create()
+```
+
+All records in this project support withers and return a new instance of themselves using the new value:
+
+```java
+Devcontainer devcontainer = ...
+Devcontainer changed = devcontainer.withImage("quay.io/other/image:version");
 ```
 
 ### Integration
