@@ -11,5 +11,4 @@ runs:
       with:
         version: latest
         java-version: 17
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         cache: maven
