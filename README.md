@@ -61,7 +61,7 @@ In order to use this library in your project, declare the following dependency:
 </dependency>
 ```
 
-Replace `${devcontainer-version}` with the [latest release](https://search.maven.org/artifact/wtf.metio.devcontainer/devcontainer.java).
+Replace `${devcontainer-version}` with the [latest release](https://central.sonatype.com/artifact/wtf.metio.devcontainer/devcontainer.java).
 
 ## License
 
