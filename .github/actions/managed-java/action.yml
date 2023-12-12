@@ -7,9 +7,8 @@ runs:
   using: composite
   steps:
     - name: Set up Java
-      uses: actions/setup-java@v3
+      uses: graalvm/setup-graalvm@v1
       with:
+        version: latest
         java-version: 17
-        java-package: jdk
-        architecture: x64
-        distribution: temurin
+        cache: maven

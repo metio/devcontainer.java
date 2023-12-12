@@ -5,27 +5,12 @@ name: Verify Commits
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - name: Clone Git Repository
-        uses: actions/checkout@v3
-      - name: Set up GraalVM
-        uses: graalvm/setup-graalvm@v1
-        with:
-          version: latest
-          java-version: 17
-          components: native-image
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Cache Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+        uses: actions/checkout@v4
+      - uses: ./.github/actions/managed-java
       - name: Build with Maven
         run: mvn --batch-mode --activate-profiles=native verify
