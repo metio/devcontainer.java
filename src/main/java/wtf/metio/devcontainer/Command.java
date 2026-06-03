@@ -4,10 +4,10 @@
  */
 package wtf.metio.devcontainer;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.List;
 import java.util.Map;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Wrapper for the various ways to specify commands in a devcontainer file. Note that only one of the parameters is set

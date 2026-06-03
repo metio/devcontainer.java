@@ -4,11 +4,11 @@
  */
 module wtf.metio.devcontainer {
 
-  requires com.fasterxml.jackson.databind;
+  requires tools.jackson.databind;
   requires static io.soabase.recordbuilder.core;
   requires static java.compiler;
 
-  opens wtf.metio.devcontainer to com.fasterxml.jackson.databind;
+  opens wtf.metio.devcontainer to tools.jackson.databind;
 
   exports wtf.metio.devcontainer;
 
