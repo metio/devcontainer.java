@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: The devcontainer.java Authors
+# SPDX-License-Identifier: 0BSD
+
+FROM ghcr.io/graalvm/native-image-community:25
+
+# Install Maven
+ENV MAVEN_HOME /usr/share/maven
+
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21 ${MAVEN_HOME} ${MAVEN_HOME}
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
+
+RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
+
+ENV MAVEN_CONFIG "/root/.m2"
+
+ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
+CMD ["mvn"]

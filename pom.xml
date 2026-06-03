@@ -15,9 +15,9 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Inheritance -->
     <parent>
-        <groupId>wtf.metio.maven.parents</groupId>
-        <artifactId>maven-parents-java-prototype</artifactId>
-        <version>2024.1.12</version>
+        <groupId>wtf.metio.maven</groupId>
+        <artifactId>maven-parent</artifactId>
+        <version>2026.5.29</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -63,8 +63,34 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Properties -->
     <properties>
-        <version.jdk>${javaVersion}</version.jdk>
+        <global.jdkVersion>25</global.jdkVersion>
+        <version.jackson>2.21.4</version.jackson>
+        <version.record-builder>52</version.record-builder>
+        <version.junit>6.1.0</version.junit>
     </properties>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                          DEPENDENCY MANAGEMENT                          -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- https://maven.apache.org/pom.html#Dependency_Management -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${version.jackson}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${version.junit}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!--                               DEPENDENCIES                              -->
@@ -82,6 +108,7 @@
         <dependency>
             <groupId>io.soabase.record-builder</groupId>
             <artifactId>record-builder-core</artifactId>
+            <version>${version.record-builder}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -101,7 +128,7 @@
                         <path>
                             <groupId>io.soabase.record-builder</groupId>
                             <artifactId>record-builder-processor</artifactId>
-                            <version>35</version>
+                            <version>${version.record-builder}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -110,21 +137,65 @@
     </build>
 
     <profiles>
+        <!-- Verifies the library can be consumed by a GraalVM native image. The profile compiles a
+             stand-in consumer (src/native/java), builds it into a native image the same way a
+             downstream project such as ilo would, and runs it. Building exercises the records and
+             reflect-config.json; running surfaces any missing runtime reflection metadata. The
+             stand-in source is only added here, so it stays out of the published jar. -->
         <profile>
             <id>native</id>
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.6.1</version>
+                        <executions>
+                            <execution>
+                                <id>add-native-smoke-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/native/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
                         <extensions>true</extensions>
+                        <configuration>
+                            <imageName>devcontainer-native-smoke</imageName>
+                            <mainClass>wtf.metio.devcontainer.NativeImageSmokeTest</mainClass>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>test-native</id>
+                                <id>build-native-smoke</id>
                                 <goals>
-                                    <goal>test</goal>
+                                    <goal>compile-no-fork</goal>
                                 </goals>
-                                <phase>test</phase>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-native-smoke</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${project.build.directory}/devcontainer-native-smoke</executable>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
