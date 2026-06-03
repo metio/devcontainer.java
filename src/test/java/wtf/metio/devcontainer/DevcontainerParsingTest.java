@@ -55,6 +55,25 @@ class DevcontainerParsingTest {
             () -> assertEquals("4gb", devcontainer.hostRequirements().memory(), "hostRequirements.memory"),
             () -> assertEquals("32gb", devcontainer.hostRequirements().storage(), "hostRequirements.storage")
         )),
+        Map.entry("host-requirements-gpu.json", devcontainer -> () -> assertAll(
+            () -> assertEquals(true, devcontainer.hostRequirements().gpu().enabled(), "hostRequirements.gpu.enabled")
+        )),
+        Map.entry("host-requirements-gpu-optional.json", devcontainer -> () -> assertAll(
+            () -> assertEquals("optional", devcontainer.hostRequirements().gpu().optional(),
+                "hostRequirements.gpu.optional")
+        )),
+        Map.entry("host-requirements-gpu-requirements.json", devcontainer -> () -> assertAll(
+            () -> assertEquals(2, devcontainer.hostRequirements().gpu().requirements().cores(),
+                "hostRequirements.gpu.requirements.cores"),
+            () -> assertEquals("8gb", devcontainer.hostRequirements().gpu().requirements().memory(),
+                "hostRequirements.gpu.requirements.memory")
+        )),
+        Map.entry("secrets.json", devcontainer -> () -> assertAll(
+            () -> assertEquals("Token used to authenticate against the GitHub API.",
+                devcontainer.secrets().get("GITHUB_TOKEN").description(), "secrets.description"),
+            () -> assertEquals("https://example.com/docs/github-token",
+                devcontainer.secrets().get("GITHUB_TOKEN").documentationUrl(), "secrets.documentationUrl")
+        )),
         Map.entry("ports-attributes.json", devcontainer -> () -> assertAll(
             () -> assertEquals("Application Port", devcontainer.portsAttributes().get("3000").label(), "label"),
             () -> assertEquals(Protocol.http, devcontainer.portsAttributes().get("3000").protocol(), "protocol"),
@@ -193,7 +212,9 @@ class DevcontainerParsingTest {
             () -> assertEquals("dev", devcontainer.build().target(), "build.target"),
             () -> assertEquals(Map.of("some", "value"), devcontainer.build().args(), "build.args"),
             () -> assertIterableEquals(List.of("some-cache:latest"), devcontainer.build().cacheFrom(),
-                "build.cacheFrom")
+                "build.cacheFrom"),
+            () -> assertIterableEquals(List.of("--add-host=host.docker.internal:host-gateway"),
+                devcontainer.build().options(), "build.options")
         )),
         Map.entry("customizations.json", devcontainer -> () -> assertAll(
             () -> assertEquals(Map.of("vscode", Map.of("settings", Map.of(), "extensions", List.of())),
@@ -209,11 +230,13 @@ class DevcontainerParsingTest {
                 devcontainer.features(), "features")
         )),
         Map.entry("mounts.json", devcontainer -> () -> assertAll(
-            () -> assertIterableEquals(List.of(Map.of(
-                    "source", "dind-var-lib-docker",
-                    "target", "/var/lib/docker",
-                    "type", "volume")),
-                devcontainer.mounts(), "mounts")
+            () -> assertEquals(MountType.volume, devcontainer.mounts().get(0).object().type(), "mounts.type"),
+            () -> assertEquals("dind-var-lib-docker", devcontainer.mounts().get(0).object().source(), "mounts.source"),
+            () -> assertEquals("/var/lib/docker", devcontainer.mounts().get(0).object().target(), "mounts.target")
+        )),
+        Map.entry("mounts-string.json", devcontainer -> () -> assertAll(
+            () -> assertEquals("source=dind-var-lib-docker,target=/var/lib/docker,type=volume",
+                devcontainer.mounts().get(0).string(), "mounts.string")
         )),
         Map.entry("security-opt-empty.json", devcontainer -> () -> assertAll(
             () -> assertIterableEquals(List.of(), devcontainer.securityOpt(), "securityOpt")

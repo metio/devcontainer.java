@@ -7,6 +7,7 @@ package wtf.metio.devcontainer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 class DevcontainerBuilderTest {
@@ -64,6 +65,51 @@ class DevcontainerBuilderTest {
     Assertions.assertEquals("test", devcontainer.name());
     Assertions.assertNotNull(devcontainer.portsAttributes().get("http"));
     Assertions.assertEquals(true, devcontainer.portsAttributes().get("http").elevateIfNeeded());
+  }
+
+  @Test
+  void createNestedGpuComponent() {
+    final var devcontainer = Devcontainer.builder()
+            .name("test")
+            .hostRequirements(HostRequirements.builder()
+                .gpu(Gpu.builder()
+                    .requirements(GpuRequirements.builder().cores(2).memory("8gb").create())
+                    .create())
+                .create())
+            .create();
+
+    Assertions.assertEquals("test", devcontainer.name());
+    Assertions.assertEquals(2, devcontainer.hostRequirements().gpu().requirements().cores());
+    Assertions.assertEquals("8gb", devcontainer.hostRequirements().gpu().requirements().memory());
+  }
+
+  @Test
+  void createNestedSecretComponent() {
+    final var devcontainer = Devcontainer.builder()
+            .name("test")
+            .secrets(Map.of("TOKEN", Secret.builder().description("a token").create()))
+            .create();
+
+    Assertions.assertEquals("test", devcontainer.name());
+    Assertions.assertEquals("a token", devcontainer.secrets().get("TOKEN").description());
+  }
+
+  @Test
+  void createNestedMountComponent() {
+    final var devcontainer = Devcontainer.builder()
+            .name("test")
+            .mounts(List.of(Mount.builder()
+                .object(MountObject.builder()
+                    .type(MountType.volume)
+                    .source("dind-var-lib-docker")
+                    .target("/var/lib/docker")
+                    .create())
+                .create()))
+            .create();
+
+    Assertions.assertEquals("test", devcontainer.name());
+    Assertions.assertEquals(MountType.volume, devcontainer.mounts().get(0).object().type());
+    Assertions.assertEquals("/var/lib/docker", devcontainer.mounts().get(0).object().target());
   }
 
   @Test

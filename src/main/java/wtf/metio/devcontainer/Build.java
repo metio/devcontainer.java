@@ -23,6 +23,9 @@ import java.util.Map;
  *                   image. Cached image identifiers are passed to the docker build command with --cache-from. Note that
  *                   the array syntax will execute the command without a shell. You can learn more about formatting
  *                   string vs array properties.
+ * @param options    An array of additional arguments that should be passed to the docker build command when building a
+ *                   Dockerfile. Defaults to not set. For example: "build": { "options": [ "--add-host=host.docker
+ *                   .internal:host-gateway" ] }
  */
 @RecordBuilder
 @RecordBuilder.Options(buildMethodName = "create")
@@ -31,7 +34,8 @@ public record Build(
     String context,
     Map<String, String> args,
     String target,
-    List<String> cacheFrom) implements BuildBuilder.With {
+    List<String> cacheFrom,
+    List<String> options) implements BuildBuilder.With {
 
     public static BuildBuilder builder() {
         return BuildBuilder.builder();
