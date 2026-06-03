@@ -9,6 +9,7 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 public final class GpuDeserializer extends StdDeserializer<Gpu> {
 
@@ -32,7 +33,7 @@ public final class GpuDeserializer extends StdDeserializer<Gpu> {
             return new Gpu(null, null, context.readTreeAsValue(node, GpuRequirements.class));
         }
 
-        return context.reportInputMismatch(Gpu.class, "Cannot deserialize given input to Gpu");
+        throw MismatchedInputException.from(parser, Gpu.class, "Cannot deserialize given input to Gpu");
     }
 
 }

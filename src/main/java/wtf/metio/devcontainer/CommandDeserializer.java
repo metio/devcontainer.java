@@ -12,6 +12,7 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.node.StringNode;
 
 public final class CommandDeserializer extends StdDeserializer<Command> {
@@ -38,7 +39,7 @@ public final class CommandDeserializer extends StdDeserializer<Command> {
             return new Command(null, null, context.readTreeAsValue(node, type));
         }
 
-        return context.reportInputMismatch(Command.class, "Cannot deserialize given input to Command");
+        throw MismatchedInputException.from(parser, Command.class, "Cannot deserialize given input to Command");
     }
 
 }
