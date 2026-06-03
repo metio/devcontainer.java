@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-FileCopyrightText: The devcontainer.java Authors
+SPDX-License-Identifier: 0BSD
+-->
+<FindBugsFilter xmlns="https://github.com/spotbugs/filter/3.0.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/master/spotbugs/etc/findbugsfilter.xsd">
+
+  <!--
+    The records model devcontainer.json and carry List/Map components. A record's canonical
+    constructor and accessor necessarily store and return those references, which SpotBugs reports
+    as representation exposure. The exposure is intended: the records are plain, immutable-by-convention
+    data carriers, not defensive value objects.
+  -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+  </Match>
+
+  <!--
+    record-builder generates the *Builder classes (and their nested With / _FromWith types). Their
+    factory methods mirror the record name (e.g. Devcontainer(...)), which trips the method-naming
+    convention check. Generated code is not ours to restyle, so it is excluded from analysis.
+  -->
+  <Match>
+    <Class name="~.*Builder(\$.*)?"/>
+  </Match>
+
+</FindBugsFilter>

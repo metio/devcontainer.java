@@ -133,6 +133,57 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <!-- Declaring the plugin activates the parent's managed check + cpd-check executions (both
+                 bound to verify). PMD 7.x is pinned because the bundled engine must parse JDK 25 sources;
+                 the focused ruleset keeps violations actionable. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <printFailingErrors>true</printFailingErrors>
+                    <failOnViolation>true</failOnViolation>
+                    <minimumTokens>100</minimumTokens>
+                    <rulesets>
+                        <ruleset>config/pmd/ruleset.xml</ruleset>
+                    </rulesets>
+                    <!-- record-builder emits many near-identical wither methods; analysing that
+                         generated source only produces noise, so it is left out of source and CPD scans. -->
+                    <excludeRoots>
+                        <excludeRoot>${project.build.directory}/generated-sources/annotations</excludeRoot>
+                    </excludeRoots>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd-core</artifactId>
+                        <version>7.25.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>net.sourceforge.pmd</groupId>
+                        <artifactId>pmd-java</artifactId>
+                        <version>7.25.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- The parent only manages the SpotBugs version; this binds its analysis to verify. The
+                 exclude filter drops findings inherent to an immutable record data model (records that
+                 hold List/Map necessarily expose them through the canonical accessor/constructor). -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <configuration>
+                    <effort>Max</effort>
+                    <excludeFilterFile>config/spotbugs/exclude.xml</excludeFilterFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
