@@ -184,6 +184,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Declaring the plugin activates the parent's managed JaCoCo agent + check executions, which
+                 gate verify at 100% coverage (jacoco.minCoverage). The only configuration needed here is the
+                 exclude set: the record-builder *Builder classes are generated (not ours to test, mirroring
+                 the PMD/SpotBugs stance) and the native smoke stand-in runs as a native executable rather
+                 than under the agent, so both are kept out of the coverage analysis. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Builder.class</exclude>
+                        <exclude>**/*Builder$*.class</exclude>
+                        <exclude>**/NativeImageSmokeTest.class</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

@@ -9,6 +9,7 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 public final class MountDeserializer extends StdDeserializer<Mount> {
 
@@ -30,7 +31,7 @@ public final class MountDeserializer extends StdDeserializer<Mount> {
             return new Mount(null, context.readTreeAsValue(node, MountObject.class));
         }
 
-        return context.reportInputMismatch(Mount.class, "Cannot deserialize given input to Mount");
+        throw MismatchedInputException.from(parser, Mount.class, "Cannot deserialize given input to Mount");
     }
 
 }
