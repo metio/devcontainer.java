@@ -4,14 +4,14 @@
  */
 package wtf.metio.devcontainer;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @param name                        A name for the dev container displayed in the UI.
@@ -222,35 +222,35 @@ public record Devcontainer(
     WaitFor waitFor,
     HostRequirements hostRequirements) implements DevcontainerBuilder.With {
 
-  public static Devcontainer parse(final Path devcontainer) throws IOException {
+  public static Devcontainer parse(final Path devcontainer) {
     return parse(devcontainer, defaultObjectMapper());
   }
 
-  public static Devcontainer parse(final Path devcontainer, final ObjectMapper objectMapper) throws IOException {
-    return objectMapper.readValue(devcontainer.toFile(), Devcontainer.class);
-  }
-
-  public static Devcontainer parse(final File devcontainer) throws IOException {
-    return parse(devcontainer, defaultObjectMapper());
-  }
-
-  public static Devcontainer parse(final File devcontainer, final ObjectMapper objectMapper) throws IOException {
+  public static Devcontainer parse(final Path devcontainer, final ObjectMapper objectMapper) {
     return objectMapper.readValue(devcontainer, Devcontainer.class);
   }
 
-  public static Devcontainer parse(final String devcontainer) throws IOException {
+  public static Devcontainer parse(final File devcontainer) {
     return parse(devcontainer, defaultObjectMapper());
   }
 
-  public static Devcontainer parse(final String devcontainer, final ObjectMapper objectMapper) throws IOException {
+  public static Devcontainer parse(final File devcontainer, final ObjectMapper objectMapper) {
+    return objectMapper.readValue(devcontainer, Devcontainer.class);
+  }
+
+  public static Devcontainer parse(final String devcontainer) {
+    return parse(devcontainer, defaultObjectMapper());
+  }
+
+  public static Devcontainer parse(final String devcontainer, final ObjectMapper objectMapper) {
     return objectMapper.readValue(devcontainer, Devcontainer.class);
   }
 
   public static ObjectMapper defaultObjectMapper() {
-    final var mapper = new ObjectMapper();
-    mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-    return mapper;
+    return JsonMapper.builder()
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+        .build();
   }
 
   public static DevcontainerBuilder builder() {
