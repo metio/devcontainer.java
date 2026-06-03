@@ -19,7 +19,16 @@ JDK 25 (`global.jdkVersion` in `pom.xml`), Maven. Inherits most config from the 
 - Native-compatibility check (what CI's PR check runs — the GraalVM `native` profile): `mvn --batch-mode --activate-profiles=native verify`
 - Single test class: `mvn test -Dtest=DevcontainerParsingTest`
 
+`verify` also runs the quality gates (see below). `.github/workflows/verify.yml` runs the native command above on GraalVM 25, so PMD, SpotBugs, and the native smoke check all gate every PR.
+
 The local machine has no JDK/Maven installed; run builds through `ilo` (see global instructions) or in the GraalVM container CI uses.
+
+## Code quality gates (bound to `verify`)
+
+- **PMD** (`check` + `cpd-check`, from the parent) with a focused ruleset in `config/pmd/ruleset.xml`. The generated-sources root is excluded via `excludeRoots`.
+- **SpotBugs** (`check`) with `config/spotbugs/exclude.xml`. The exclusions are deliberate: representation-exposure findings are expected for records holding `List`/`Map`, and the generated `*Builder` classes are not ours to restyle.
+
+Both fail the build on findings. The PMD engine is pinned to 7.x so it can parse JDK 25 sources. When a quality gate flags generated code, exclude the generated artifact (root or class pattern) rather than the rule globally.
 
 ## Architecture
 

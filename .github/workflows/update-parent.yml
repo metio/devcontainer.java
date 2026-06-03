@@ -9,14 +9,30 @@ jobs:
   parent:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone Git Repository
-        uses: actions/checkout@v4
-      - uses: ./.github/actions/managed-java
-      - name: Update Parent
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v6
+      - id: graal
+        name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: latest
+          java-version: 25
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: parent
+        name: Update Parent
         run: mvn --batch-mode --define generateBackupPoms=false versions:update-parent
       - id: cpr
         name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PAT }}
           commit-message: Update parent to latest version
