@@ -77,10 +77,10 @@ import tools.jackson.databind.json.JsonMapper;
  * @param securityOpt                 Defaults to []. Cross-orchestrator way to set container security options. For
  *                                    example: "securityOpt": [ "seccomp=unconfined" ]
  * @param mounts                      Defaults to unset. Cross-orchestrator way to add additional mounts to a container.
- *                                    Each value is a string that accepts the same values as the Docker CLI --mount
- *                                    flag. Environment and pre-defined variables may be referenced in the value. For
- *                                    example: "mounts": [{ "source": "dind-var-lib-docker", "target":
- *                                    "/var/lib/docker", "type": "volume" }]
+ *                                    Each value is either a string that accepts the same values as the Docker CLI
+ *                                    --mount flag or an object with the equivalent named fields. Environment and
+ *                                    pre-defined variables may be referenced in the value. For example: "mounts": [{
+ *                                    "source": "dind-var-lib-docker", "target": "/var/lib/docker", "type": "volume" }]
  * @param features                    An object of Dev Container Feature IDs and related options to be added into your
  *                                    primary container. The specific options that are available varies by feature, so
  *                                    see its documentation for additional details. For example: "features": {
@@ -90,6 +90,9 @@ import tools.jackson.databind.json.JsonMapper;
  *                                    allows you to override the Feature install order when needed. For example:
  *                                    "overrideFeatureInstallorder": [ "ghcr.io/devcontainers/features/common-utils",
  *                                    "ghcr.io/devcontainers/features/github-cli" ]
+ * @param secrets                     Recommended secrets for this dev container. Recommendations are provided as
+ *                                    environment variable keys, each mapped to optional metadata such as a description
+ *                                    and documentation URL.
  * @param customizations              Product specific properties, defined in supporting tools
  * @param image                       Required when using an image. The name of an image in a container registry
  *                                    (DockerHub, GitHub Container Registry, Azure Container Registry) that
@@ -200,9 +203,10 @@ public record Devcontainer(
     Boolean privileged,
     List<String> capAdd,
     List<String> securityOpt,
-    List<Map<String, String>> mounts,
+    List<Mount> mounts,
     Map<String, Map<String, String>> features,
     List<String> overrideFeatureInstallOrder,
+    Map<String, Secret> secrets,
     Map<String, Map<String, Object>> customizations,
     String image,
     Build build,

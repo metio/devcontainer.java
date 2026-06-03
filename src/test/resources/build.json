@@ -6,6 +6,7 @@
     "args": {
       "some": "value"
     },
-    "cacheFrom": ["some-cache:latest"]
+    "cacheFrom": ["some-cache:latest"],
+    "options": ["--add-host=host.docker.internal:host-gateway"]
   }
 }

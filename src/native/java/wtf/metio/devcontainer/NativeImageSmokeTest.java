@@ -24,12 +24,20 @@ public final class NativeImageSmokeTest {
           "name": "smoke",
           "image": "example:123",
           "forwardPorts": [3000, "db:5432"],
-          "postCreateCommand": "npm install"
+          "postCreateCommand": "npm install",
+          "build": { "options": ["--no-cache"] },
+          "hostRequirements": { "gpu": { "cores": 2, "memory": "8gb" } },
+          "secrets": { "TOKEN": { "description": "a token" } },
+          "mounts": [{ "source": "vol", "target": "/data", "type": "volume" }]
         }
         """);
     require("example:123".equals(parsed.image()), "image");
     require(List.of("3000", "db:5432").equals(parsed.forwardPorts()), "forwardPorts");
     require("npm install".equals(parsed.postCreateCommand().string()), "postCreateCommand");
+    require(List.of("--no-cache").equals(parsed.build().options()), "build.options");
+    require(Integer.valueOf(2).equals(parsed.hostRequirements().gpu().requirements().cores()), "gpu.requirements.cores");
+    require("a token".equals(parsed.secrets().get("TOKEN").description()), "secrets.description");
+    require(MountType.volume.equals(parsed.mounts().get(0).object().type()), "mounts.type");
 
     final var built = Devcontainer.builder().name("built").image("quay.io/x:1").create();
     require("built".equals(built.name()), "builder");
