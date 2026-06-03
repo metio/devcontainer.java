@@ -45,7 +45,7 @@ jobs:
           java-version: 25
           distribution: temurin
           cache: maven
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_CENTRAL_USERNAME
           server-password: MAVEN_CENTRAL_TOKEN
       - id: gpg
