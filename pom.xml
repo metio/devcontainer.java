@@ -66,7 +66,7 @@
         <global.jdkVersion>25</global.jdkVersion>
         <version.jackson>3.2.0</version.jackson>
         <version.record-builder>53</version.record-builder>
-        <version.junit>6.1.0</version.junit>
+        <version.junit>6.1.1</version.junit>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
