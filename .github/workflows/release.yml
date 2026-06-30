@@ -69,7 +69,7 @@ jobs:
           Pull the library from [Maven Central](https://central.sonatype.com/artifact/wtf.metio.devcontainer/devcontainer.java).
       - id: setup-java
         name: Set up Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520 # v5
         with:
           java-version: 25
           distribution: temurin
@@ -79,7 +79,7 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN
       - id: gpg
         name: GPG Key
-        uses: timheuer/base64-to-file@v2
+        uses: timheuer/base64-to-file@dfa5a5dd38803cb4f5c3a081eeb28e8362d43e9c # v2
         with:
           fileName: signing.key.asc
           fileDir: ${{ github.workspace }}
@@ -103,7 +103,7 @@ jobs:
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
       - id: create_release
         name: Create Release
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
         with:
           tag_name: ${{ needs.prepare.outputs.version }}
           name: ${{ needs.prepare.outputs.version }}
