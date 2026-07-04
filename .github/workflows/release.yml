@@ -29,13 +29,13 @@ jobs:
           fetch-depth: 0
       - id: gate
         name: Check whether a release is needed
-        uses: metio/ci/needs-release@392a32762cd5626c0aa9e6e67414240a021b90ae # 2026.6.26153329
+        uses: metio/ci/needs-release@0723b4d89f3638abaa992a666382b00bb7c45d3d # 2026.7.3153603
         with:
           paths: src/main/java pom.xml
       - id: version
         name: Compute the next version
         if: steps.gate.outputs.needed == 'true'
-        uses: metio/ci/calver@392a32762cd5626c0aa9e6e67414240a021b90ae # 2026.6.26153329
+        uses: metio/ci/calver@0723b4d89f3638abaa992a666382b00bb7c45d3d # 2026.7.3153603
   release:
     needs: [prepare]
     if: needs.prepare.outputs.needed == 'true'
@@ -53,7 +53,7 @@ jobs:
         run: echo "iso8601=$(date --utc --iso-8601=seconds)" >> $GITHUB_OUTPUT
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@392a32762cd5626c0aa9e6e67414240a021b90ae # 2026.6.26153329
+        uses: metio/ci/release-notes@0723b4d89f3638abaa992a666382b00bb7c45d3d # 2026.7.3153603
         with:
           version: ${{ needs.prepare.outputs.version }}
           previous: ${{ needs.prepare.outputs.previous }}
