@@ -21,7 +21,7 @@ JDK 25 (`global.jdkVersion` in `pom.xml`), Maven. Inherits most config from the 
 
 `verify` also runs the quality gates (see below). `.github/workflows/verify.yml` runs the native command above on GraalVM 25, so PMD, SpotBugs, and the native smoke check all gate every PR.
 
-The local machine has no JDK/Maven installed; run builds through `ilo` (see global instructions) or in the GraalVM container CI uses.
+`.breto.edn` installs GraalVM 25 and Maven; run builds inside `breto env`.
 
 ## Code quality gates (bound to `verify`)
 
