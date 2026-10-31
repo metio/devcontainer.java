@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: The devcontainer.java Authors
 SPDX-License-Identifier: 0BSD
- -->
+-->
 
 # devcontainer.java
 
@@ -63,24 +63,13 @@ In order to use this library in your project, declare the following dependency:
 
 Replace `${devcontainer-version}` with the [latest release](https://central.sonatype.com/artifact/wtf.metio.devcontainer/devcontainer.java).
 
-## License
-
-```
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-```
-
 ## Mirrors
 
 - https://github.com/metio/devcontainer.java
 - https://gitlab.com/metio.wtf/devcontainer.java
 - https://bitbucket.org/metio-wtf/devcontainer.java
 - https://codeberg.org/metio.wtf/devcontainer.java
+
+## License
+
+[0BSD](LICENSES/0BSD.txt).
