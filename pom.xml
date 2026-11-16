@@ -64,7 +64,7 @@
     <!-- https://maven.apache.org/pom.html#Properties -->
     <properties>
         <global.jdkVersion>25</global.jdkVersion>
-        <version.jackson>3.2.4</version.jackson>
+        <version.jackson>3.3.0</version.jackson>
         <version.record-builder>53</version.record-builder>
         <version.junit>6.1.3</version.junit>
     </properties>
@@ -216,7 +216,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.6.2</version>
+                        <version>3.8.0</version>
                         <executions>
                             <execution>
                                 <id>add-native-smoke-source</id>
